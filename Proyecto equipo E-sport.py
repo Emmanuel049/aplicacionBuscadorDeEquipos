@@ -18,52 +18,115 @@ def carga_dicc():
 
 from cmath import log
 from distutils.log import Log
+import psycopg2
 
-DICC_BD = dicc_bd(); 
-def sign_in():
+def sign_in(mail, pwd):
     #compara los usuarios con la BD y si no estan los rechaza.
-    log = True;
-    usuario = input("Ingrese usuario: ");
-    if usuario in DICC_BD:
-        contraseña = input("Ingrese contraseña: ");
-        if contraseña == DICC_BD[usuario]:
-            print("Logeaste con exito!")
-        else:
-            print("Contraseña incorrecta, ingrese nuevamente la contraseña")
-            log = False
-    else:
-        print("Usuario incorrecto, ingrese nuevamente el usuario")
-        log = False
-    return log
 
-def sign_up():
-    #Ingresa datos para armar un usuario y guardarlo en la BD.
-    nombre = input("Ingrese nombre: ");
-    apellido = input("Ingrese apellido: ");
-    usuario = input("Ingrese email: ");
-    if usuario in DICC_BD:
-        print("El usuario ya existe, vuelva a intentarlo."); 
-        bandera = False
-    else: 
-        contraseña = input("Ingrese contraseña: ");
-        DICC_BD[usuario] = contraseña
-        bandera = True
-    return bandera;
+    try:
+        db = psycopg2.connect(
+            host='localhost',
+            user='postgres',
+            password='asd123',
+            database='postgres',
+            port=1234
+        )
 
-def dicc_bd():
-    otro = 's';
-    diccUsuarios = {};
-    while (otro == 's'):
-       usuario = input("Ingrese usuario: ");
-       diccUsuarios[usuario] = input("Ingrese contraseña: ");
-       otro = input("Ingrese s/n dependiendo si quiere o no seguir respectivamente: ");
-    print(diccUsuarios);
-    return diccUsuarios
+        print("Conexion Exitosa")
+
+        #Muestra el tipo y versión de la base de datos utilizada, se ejecuta en forma de prueba
+
+        cursor = db.cursor()
+        query = "SELECT version()"
+        cursor.execute(query)
+        retorno = cursor.fetchone()
+        print(retorno)
+
+        #Sentencias para encontrar la contraseña, en caso de no encontrarla 
+
+        query = "SELECT contraseña FROM login WHERE email LIKE '{}'".format(mail)
+        print(query)
+        cursor.execute(query)
+        retorno = cursor.fetchall()
+        print(retorno)
+
+        if (len(retorno) == 0):
+            raise Exception("No encontré el mail solicitado en la base de datos")
+
+        if (retorno[0][0] != pwd):
+            raise Exception("La contraseña ingresada no coincide")
+        
+        print(type(retorno))
+        print(retorno)
+
+        respuesta = True
+
+    except Exception as e:
+        print (e)
+        respuesta = False
+
+    finally:
+        db.close()
+        print("Conexion Finalizada")
+        print("Devolviendo respuesta: {}".format(respuesta))
+        return respuesta
+
+def sign_up(mail,pwd):
+
+    try:
+        db = psycopg2.connect(
+            host='localhost',
+            user='postgres',
+            password='asd123',
+            database='postgres',
+            port=1234
+        )
+
+        print("Conexion Exitosa")
+
+        #Muestra el tipo y versión de la base de datos utilizada, se ejecuta en forma de prueba
+
+        cursor = db.cursor()
+        query = "SELECT version()"
+        cursor.execute(query)
+        retorno = cursor.fetchone()
+        print(retorno)
+
+        #Sentencias para revisar que no exista el usuario, ya que no puedo ingresar un usuario que ya existe
+
+        query = "SELECT email FROM login WHERE email LIKE '{}'".format(mail)
+        print(query)
+        cursor.execute(query)
+        retorno = cursor.fetchall()
+        print(retorno)
+
+        if (len(retorno) != 0):
+            raise Exception("No puedo crear una cuenta con un usuario con mail ya existente en la base de datos")
+
+        query = "INSERT INTO login (email, contraseña) VALUES ('{}','{}')".format(mail,pwd)
+        print(query)
+        cursor.execute(query)
+
+        db.commit()
+
+        respuesta = True
+
+    except Exception as e:
+        print (e)
+        respuesta = False
+
+    finally:
+        db.close()
+        print("Conexion Finalizada")
+        print("Devolviendo respuesta: {}".format(respuesta))
+        return respuesta
+
+def Test_Login(mail,pwd):
+    print (sign_in(mail,pwd))
 
 
-def Main():
-    cont = 0
-    boolean = sign_up();
-    print(DICC_BD)
-    print(boolean)
-Main();
+def Test_Register(mail,pwd):
+    print (sign_up(mail,pwd))
+
+# Test_Login('usuariodeprueba@gmail.com',"prueba12345")
+# Test_Register('prueba_evelyn@gmail.com.ar',"ekisdexD")
