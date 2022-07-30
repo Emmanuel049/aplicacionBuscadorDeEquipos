@@ -1,0 +1,17 @@
+{% extends 'base/base.html' %}
+
+  {% block content %}
+
+    {% from "macro.html" import render_field %}
+
+      <form class="classFrom" name="sendMessage" id="contactForm" method="POST">
+          {{ render_field(form.username) }}
+          {{ render_field(form.password) }}
+          <button class="boton" type="submit">Enviar</button>
+          <p class="message">¿No está registrado? <a href="#" id="crearCuenta" onclick="">Crear una cuenta</a></p>
+      </form>
+
+
+
+
+  {% endblock %}
