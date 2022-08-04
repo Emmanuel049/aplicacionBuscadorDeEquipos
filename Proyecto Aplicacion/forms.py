@@ -1,6 +1,7 @@
-from wtforms import Form, StringField, validators,PasswordField
+from wtforms import Form, StringField, PasswordField, validators
 
-class CommentForm(Form):
+class LogginForm(Form):
     
-    username = StringField('Usuario', [validators.Length(min=4, max=25)])
+    username = StringField('Usuario', [validators.Length(min=4, max=30)])
     password  = PasswordField('Contraseña')
+

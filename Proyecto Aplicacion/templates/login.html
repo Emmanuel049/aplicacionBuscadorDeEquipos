@@ -1,33 +1,27 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Loguin</title>
-    <link rel="stylesheet" href="./Estilos/login-style.css">
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login</title>
+  <link rel="stylesheet" href=" {{ url_for('static', filename='css/login.css') }}">
 </head>
-
 <body>
-    <div class="login-page">
-        <div class="form">
+  {% extends 'base/base.html' %}
 
-<!---------- Formulario de Logueo ---------->
+  {% block content %}
 
-            <form class="login-form" id="formularioDeLogueo" method="POST" action="">
-                <p id="cartelitoDelError" class="cartelitoDelErrorr"></p>
-                <input name="user" id="Usuario" type="text" placeholder="Usuario" />
-                <input name="pass" id="Contraseña" type="password" placeholder="Contraseña" />
-                <div class="botones">
-                <button type="submit" onclick="">Ingresar</button>
-                </div>
-                <p class="message">¿No está registrado? <a href="#" id="crearCuenta" onclick="mostrarRegistro()">Crear una cuenta</a></p>
-            </form>
-            
-        </div>
-    </div>
-    <script src="./Codigos/login-main.js"></script>
-    <script src="./Codigos/main.js"></script>
+    {% from "macroLogin.html" import render_field %}
+
+      <form class="classFrom" name="sendMessage" id="contactForm" method="POST" action="">
+          {{ render_field(form.username) }}
+          {{ render_field(form.password) }}
+          <button class="boton" type="submit">Enviar</button>
+          <p class="message">¿No está registrado? <a href="register" id="crearCuenta" onclick="">Crear una cuenta</a></p>
+      </form>
+      
+  {% endblock %}
+ 
 </body>
-
 </html>

@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 """
 Created on Thu Jul  7 13:19:34 2022
-
 @author: Mauro
 """
 """
@@ -27,10 +26,10 @@ def sign_in(mail, pwd):
         db = psycopg2.connect(
             host='localhost',
             user='postgres',
-            password='asd123',
+            password='123CrackeN',
             database='postgres',
-            port=1234
-        )
+            port=8000
+    )
 
         print("Conexion Exitosa")
 
@@ -71,15 +70,15 @@ def sign_in(mail, pwd):
         print("Devolviendo respuesta: {}".format(respuesta))
         return respuesta
 
-def sign_up(mail,pwd):
+def sign_up(registerEmail,registerPassword):
 
     try:
         db = psycopg2.connect(
             host='localhost',
             user='postgres',
-            password='asd123',
+            password='123CrackeN',
             database='postgres',
-            port=1234
+            port=8000
         )
 
         print("Conexion Exitosa")
@@ -94,7 +93,7 @@ def sign_up(mail,pwd):
 
         #Sentencias para revisar que no exista el usuario, ya que no puedo ingresar un usuario que ya existe
 
-        query = "SELECT email FROM login WHERE email LIKE '{}'".format(mail)
+        query = "SELECT email FROM login WHERE email LIKE '{}'".format(registerEmail)
         print(query)
         cursor.execute(query)
         retorno = cursor.fetchall()
@@ -103,7 +102,7 @@ def sign_up(mail,pwd):
         if (len(retorno) != 0):
             raise Exception("No puedo crear una cuenta con un usuario con mail ya existente en la base de datos")
 
-        query = "INSERT INTO login (email, contraseña) VALUES ('{}','{}')".format(mail,pwd)
+        query = "INSERT INTO login (email, contraseña) VALUES ('{}','{}')".format(registerEmail,registerPassword)
         print(query)
         cursor.execute(query)
 
@@ -125,8 +124,8 @@ def Test_Login(mail,pwd):
     print (sign_in(mail,pwd))
 
 
-def Test_Register(mail,pwd):
-    print (sign_up(mail,pwd))
+def Test_Register(registerEmail,registerPassword):
+    print (sign_up(registerEmail,registerPassword))
 
 # Test_Login('usuariodeprueba@gmail.com',"prueba12345")
 # Test_Register('prueba_evelyn@gmail.com.ar',"ekisdexD")
