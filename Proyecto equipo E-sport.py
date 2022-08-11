@@ -4,17 +4,6 @@ Created on Thu Jul  7 13:19:34 2022
 
 @author: Mauro
 """
-"""
-def carga_dicc():
-    #Carga el dicc con usuarios y contraseñas
-    
-    dicc_usuarios: 
-        {
-        "Usuario": " ",
-        "Contraseña": " ",
-        }
-    
-"""
 
 from cmath import log
 from distutils.log import Log
