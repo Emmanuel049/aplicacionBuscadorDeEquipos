@@ -7,108 +7,23 @@ Created on Thu Jul  7 13:19:34 2022
 
 from cmath import log
 from distutils.log import Log
-import psycopg2
+from GestorDB import GestorDB
+from GestorLogin import GestorLogin
+
+#import psycopg2
+
+CONEXION_LOGIN = GestorLogin()
+
+
 
 def sign_in(mail, pwd):
     #compara los usuarios con la BD y si no estan los rechaza.
 
-    try:
-        db = psycopg2.connect(
-            host='localhost',
-            user='postgres',
-            password='asd123',
-            database='postgres',
-            port=1234
-        )
-
-        print("Conexion Exitosa")
-
-        #Muestra el tipo y versión de la base de datos utilizada, se ejecuta en forma de prueba
-
-        cursor = db.cursor()
-        query = "SELECT version()"
-        cursor.execute(query)
-        retorno = cursor.fetchone()
-        print(retorno)
-
-        #Sentencias para encontrar la contraseña, en caso de no encontrarla 
-
-        query = "SELECT contraseña FROM login WHERE email LIKE '{}'".format(mail)
-        print(query)
-        cursor.execute(query)
-        retorno = cursor.fetchall()
-        print(retorno)
-
-        if (len(retorno) == 0):
-            raise Exception("No encontré el mail solicitado en la base de datos")
-
-        if (retorno[0][0] != pwd):
-            raise Exception("La contraseña ingresada no coincide")
-        
-        print(type(retorno))
-        print(retorno)
-
-        respuesta = True
-
-    except Exception as e:
-        print (e)
-        respuesta = False
-
-    finally:
-        db.close()
-        print("Conexion Finalizada")
-        print("Devolviendo respuesta: {}".format(respuesta))
-        return respuesta
+    CONEXION_LOGIN.sign_in(mail,pwd)
 
 def sign_up(mail,pwd):
 
-    try:
-        db = psycopg2.connect(
-            host='localhost',
-            user='postgres',
-            password='asd123',
-            database='postgres',
-            port=1234
-        )
-
-        print("Conexion Exitosa")
-
-        #Muestra el tipo y versión de la base de datos utilizada, se ejecuta en forma de prueba
-
-        cursor = db.cursor()
-        query = "SELECT version()"
-        cursor.execute(query)
-        retorno = cursor.fetchone()
-        print(retorno)
-
-        #Sentencias para revisar que no exista el usuario, ya que no puedo ingresar un usuario que ya existe
-
-        query = "SELECT email FROM login WHERE email LIKE '{}'".format(mail)
-        print(query)
-        cursor.execute(query)
-        retorno = cursor.fetchall()
-        print(retorno)
-
-        if (len(retorno) != 0):
-            raise Exception("No puedo crear una cuenta con un usuario con mail ya existente en la base de datos")
-
-        query = "INSERT INTO login (email, contraseña) VALUES ('{}','{}')".format(mail,pwd)
-        print(query)
-        cursor.execute(query)
-
-        db.commit()
-
-        respuesta = True
-
-    except Exception as e:
-        print (e)
-        respuesta = False
-
-    finally:
-        db.close()
-        print("Conexion Finalizada")
-        print("Devolviendo respuesta: {}".format(respuesta))
-        return respuesta
+    CONEXION_LOGIN.sign_up(mail,pwd)
 
 def Test_Login(mail,pwd):
     print (sign_in(mail,pwd))
