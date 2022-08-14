@@ -5,12 +5,6 @@ from typing_extensions import Self
 
 import psycopg2
 
-host='localhost',
-user='postgres',
-password='felgrand97',
-database='Project-Esport',
-port=5432
-
 class GestorDB:
     def __init__(self):
         self
